@@ -62,6 +62,7 @@ function signup() {
             email: Email,
             pwd: passeword,
             confirmePwd: confirmePwd,
+            role:'client',
             tel: tel,
             
         };
@@ -178,7 +179,13 @@ function login() {
     }
     if (findedUser) {
         localStorage.setItem('connectedUserID', findedUser.id);
-        location.replace("index.html");
+        if (findedUser.role=='client'){
+            location.replace('index.html')
+        } else if(findedUser.role=='store'){
+            location.replace('category.html')
+        }
+        
+        
     } else {
         document.getElementById('loginEreeur').innerHTML = 'please check email and password';
         document.getElementById('loginEreeur').style.color = "red";
@@ -468,7 +475,9 @@ function searchOrderPositionById(idParam){
          
            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li></ul>
            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li></ul>
-           <li class="nav-item"><a class="nav-link" href="signup.html">Signup</a></li></ul>`
+           <li class="nav-item"><a class="nav-link" href="signup.html">Signup</a></li></ul>
+           <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li></ul>
+           <li class="nav-item"><a class="nav-link" href="login.html">vous ete STORE/CLIENT</a></li></ul>`
 
       }
       document.getElementById('headerId').innerHTML=content;
@@ -579,7 +588,7 @@ function searchOrderPositionById(idParam){
             confirmePwd: confirmePwd,
             tel: tel,
             Adresse:Adresse,
-            role:'stor'
+            role:'store'
         };
         //save object to localStorage
         //JSON.stringify => convert Object to string
@@ -593,30 +602,44 @@ function searchOrderPositionById(idParam){
     }
 
       }
-      function display() { 
-          //get all orders from ls from odres key
-    var userTab = JSON.parse(localStorage.getItem('user') || '[]')
-    var content = '';
-    //loop tr orderstab .length times
-    for (let i = 0; i < userTab.length; i++) {
-        content = content + `
+      function displayAdminProduct() { 
+          var productsTab = JSON.parse(localStorage.getItem("Product") || "[]");
+          //productsTab[{id,prName,prStock,prCategory},{},{}..]
+          var content = '';
+          for (var i = 0; i < productsTab.length; i++) {
+              content = content +`
               <tr>
-                                <td>
-                                   ${userTab[i].id} 
-                                </td> 
-                                <td>
-                                   ${userTab[i].fName} 
-                                </td> 
-                                <td>
-                                   ${userTab[i].lName} 
-                                </td> 
-                                <td>
-                                   ${userTab[i].email} 
-                                </td> 
+              <th scope="row">${productsTab[i].id}</th>
+              <td>${productsTab[i].prName}</td>
+              <td>${productsTab[i].prPrice}</td>
+              <td>${productsTab[i].prStock}</td>
+              <td>${productsTab[i].prCategorie}</td>
+              <td><button onclick="updateProduct()" >update</button> 
+              <button onclick="deleteByAdmin(${i})" >delete</button>
+              </td>
+            </tr>
+                  `
+      
+      
+      
+          }
+          document.getElementById("productAdmin").innerHTML = content;
+  
+      }
+      function deleteByAdmin(pos){
+        var productsTab = JSON.parse(localStorage.getItem("Product") || "[]");
+        productsTab.splice(pos,1)
+        localStorage.setItem("Product",JSON.stringify(productsTab))
+        location.reload();
+      }
+      // function that generat delete object by admin
+      function deleteObjectByAdmin(pos,key){
+        var objectTab = JSON.parse(localStorage.getItem(key) || "[]");
+        objectTab.splice(pos,1)
+        localStorage.setItem(key,JSON.stringify(objectTab))
+        location.reload();
+      }
 
-    }           </tr>`
-}
-document.getElementById('displayDiv').innerHTML=content  
-
-
+      function updateProduct(){
+          alert('test')
       }

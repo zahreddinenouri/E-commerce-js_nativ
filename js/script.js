@@ -614,7 +614,7 @@ function searchOrderPositionById(idParam){
               <td>${productsTab[i].prPrice}</td>
               <td>${productsTab[i].prStock}</td>
               <td>${productsTab[i].prCategorie}</td>
-              <td><button onclick="updateProduct()" >update</button> 
+              <td><button onclick="updateProduct(${i})" >update</button> 
               <button onclick="deleteByAdmin(${i})" >delete</button>
               </td>
             </tr>
@@ -627,7 +627,7 @@ function searchOrderPositionById(idParam){
   
       }
       function deleteByAdmin(pos){
-        var productsTab = JSON.parse(localStorage.getItem("Product") || "[]");
+        var productsTab = JSON.parse(localStorage.getItem("Product"));
         productsTab.splice(pos,1)
         localStorage.setItem("Product",JSON.stringify(productsTab))
         location.reload();
@@ -640,6 +640,28 @@ function searchOrderPositionById(idParam){
         location.reload();
       }
 
-      function updateProduct(){
-          alert('test')
+      function updateProduct(id){
+        var x= searchObjectByIdAndKey(id,'Product')
+        var form=`<div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+               
+            </div>
+            <div class="col-lg-6">
+              
+                        <div class="col-md-12 form-group">
+                            <input type="text" class="form-control" value=>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <input type="text" class="form-control" >
+                        </div>
+                       
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        `
+        document.getElementById('editProduct').innerHTML=form;
       }
